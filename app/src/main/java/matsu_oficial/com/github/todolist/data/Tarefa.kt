@@ -1,0 +1,10 @@
+package matsu_oficial.com.github.todolist.data
+
+@Entity(tableName = "tarefas")
+data class Tarefa(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val titulo: String,
+    val descricao: String,
+    val concluida: Boolean = false,
+    val dataCriacao: Long = System.currentTimeMillis()
+)
