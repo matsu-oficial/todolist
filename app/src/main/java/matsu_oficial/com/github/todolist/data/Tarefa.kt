@@ -1,10 +1,29 @@
-package matsu_oficial.com.github.todolist.data
+package LucasABelCorrea.com.github.todolist.data
 
-@Entity(tableName = "tarefas")
-data class Tarefa(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val titulo: String,
-    val descricao: String,
-    val concluida: Boolean = false,
-    val dataCriacao: Long = System.currentTimeMillis()
-)
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+@Database(entities = [Tarefa::class], version = 1, exportSchema = false)
+abstract class TarefaDatabase : RoomDatabase() {
+
+    abstract fun tarefaDao(): TarefaDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: TarefaDatabase? = null
+
+        fun getDatabase(context: Context): TarefaDatabase {
+            return INSTANCE ?: synchronized(this) {
+                Room.databaseBuilder(
+                    context.applicationContext,
+                    TarefaDatabase::class.java,
+                    "tarefas.db"
+                ).build().also { INSTANCE = it }
+            }
+        }
+
+    }
+
+}
